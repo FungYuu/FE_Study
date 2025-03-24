@@ -75,9 +75,9 @@ watch(source, callback, [options])
 
 - watchEffect不需要手动传入依赖
 
-- 每次初始化时watchEffect都会执行一次回调函数来自动获取依赖
+  - 每次初始化时watchEffect都会执行一次回调函数来自动获取依赖
 
-- watchEffect无法获取到原值，只能得到变化后的值
+  - watchEffect无法获取到原值，只能得到变化后的值
 
 ```js
 import { defineComponent, ref, reactive, toRefs, watch } from "vue";

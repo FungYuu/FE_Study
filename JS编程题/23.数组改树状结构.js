@@ -57,13 +57,24 @@ function toTree(data) {
   });
 
   // 4.再次遍历数组内所有对象
+  // data.forEach((item) => {
+  //   // 4.1.判断每个当前对象的 pid, 如当前对象 pid 不为空, 则说明不是最上级的根对象
+  //   if (item.pid) {
+  //     // 4.3.利用当前对象的 otherObj[pid] 找到 otherObj[id] 中对应当前对象的父级对象, 将当前对象添加到其对应的父级对象的 children 属性中
+  //     otherObj[item.pid].children.push(item);
+  //   } else {
+  //     // 4.3.当前对象 pid 如果为空, 则为树状结构的根对象
+  //     tree.push(item);
+  //   }
+  // });
   data.forEach((item) => {
-    // 4.1.判断每个当前对象的 pid, 如当前对象 pid 不为空, 则说明不是最上级的根对象
-    if (item.pid) {
-      // 4.3.利用当前对象的 otherObj[pid] 找到 otherObj[id] 中对应当前对象的父级对象, 将当前对象添加到其对应的父级对象的 children 属性中
-      otherObj[item.pid].children.push(item);
+    // 4.1.获取父节点，如果没有则为根节点
+    const parent = otherObj[item.pid];
+    if (parent) {
+      // 4.3.将当前元素推入父节点的children数组
+      parent.children.push(item);
     } else {
-      // 4.3.当前对象 pid 如果为空, 则为树状结构的根对象
+      // 4.3.如果没有父节点，就说明是根节点，推入tree数组
       tree.push(item);
     }
   });
@@ -71,7 +82,7 @@ function toTree(data) {
   return tree;
 }
 
-console.log(toTree(data));
+// console.log('1', toTree(data), JSON.stringify(toTree(data)));
 
 const comment_list = [
   {
@@ -102,64 +113,10 @@ const comment_list = [
   }
 ];
 
-// function foltToTree(arr) {
-//   //先检测是不是数组类型
-//   if (!Array.isArray(arr)) {
-//     return [];
-//   }
-//   // JS的对象就是hash表
-//   const obj = {};
-//   arr.forEach((item) => {
-//     obj[item.id] = item;
-//   });
-//   const targetArr = [];
-//   arr.forEach((item) => {
-//     const parent = obj[item.parentId]; //有pId就说明他有父亲，找到他的父亲parent
-//     if (parent) {
-//       //如果他有父亲，就给他添加children属性
-//       parent.children = parent.children || [];
-//       parent.children.push(item);
-//     } else {
-//       //他没有父亲，就把当前项push进去（顶层）
-//       targetArr.push(item);
-//     }
-//   });
-//   return targetArr;
-// }
-
 /**
  * 方法三：不用递归的简单循环
  * @param { Array } 源数据
  */
-
-const arrayToTree = (items) => {
-  const result = []; // 结果集
-  const itemMap = {};
-
-  // 先转成map存储
-  for (const item of items) {
-    itemMap[item.id] = { ...item, children: [] };
-  }
-
-  for (const item of items) {
-    const id = item.id;
-    const parentId = item.parentId;
-    const treeItem = itemMap[id];
-
-    if (parentId == 0) {
-      result.push(treeItem);
-    } else {
-      if (!itemMap[parentId]) {
-        itemMap[parentId] = { children: [] };
-      }
-      itemMap[parentId].children.push(treeItem);
-    }
-  }
-  return result;
-};
-
-// const res3 = arrayToTree(array);
-// console.log("res3", res3);
 
 function arrToTree(list) {
   // 定义最终需要返回的树形结构数据
@@ -179,7 +136,4 @@ function arrToTree(list) {
   return treeData;
 }
 
-console.log(arrToTree(comment_list));
-console.log(arrToTree(comment_list)[0].children);
-
-console.log(Object.getOwnPropertyDescriptors(comment_list[0]));
+console.log(arrToTree(comment_list), '1');

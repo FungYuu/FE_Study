@@ -116,15 +116,13 @@ function debounce(fn, delay = 50){
 
 ```js
 function throttle(fn, delay = 100){
-  let timer = null
-  return function(){ 
-    if(timer){
-      return
-    }
-    timer = setTimeout(() => {
+  let oldTime = Date.now()
+  return function() { 
+    let nowTime = Date.now()
+    if(nowTime - oldTime >= delay){
       fn.apply(this, arguments)
-      timer = null
-    },delay)
+      oldTime = Date.now()
+    }
   }
 }
 ```
